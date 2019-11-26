@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Calling father script..."
+/usr/libexec/s2i/assemble
+
+DATE=$(date)
+echo "Applicatio built on $DATE" > info.html 
+
