@@ -5,7 +5,7 @@ app.get('/', function (req, res) {
   res.send('Hello World!\n');
 });
 
-app.get('/post-dnsmasq', function (req, res) {
+app.post('/post-dnsmasq', function (req, res) {
   console.log('Body:', req.body);
   res.sendStatus(200);
 });
