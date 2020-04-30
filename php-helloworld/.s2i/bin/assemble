@@ -4,5 +4,6 @@ echo "Calling father script..."
 /usr/libexec/s2i/assemble
 
 DATE=$(date)
-echo "Applicatio built on $DATE" > info.html 
+echo "Application built on $DATE" > info.html 
+echo "Modified by Ricardo Alonso" >> info.html
 
