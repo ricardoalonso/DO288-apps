@@ -1,0 +1,210 @@
+apiVersion: v1
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: hello
+    name: hello
+    selfLink: /apis/apps.openshift.io/v1/namespaces/ricardoalonsos-demo/deploymentconfigs/hello
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: hello
+      deploymentconfig: hello
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: hello
+          deploymentconfig: hello
+      spec:
+        containers:
+        - image: image-registry.openshift-image-registry.svc:5000/ricardoalonsos-demo/hello@sha256:e000267d2a202f0ad4e59b41e792f929dc8a38e444dcbd2bc22da752a2f03822
+          imagePullPolicy: Always
+          name: hello
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - hello
+        from:
+          kind: ImageStreamTag
+          name: hello:latest
+          namespace: ricardoalonsos-demo
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: hello
+    name: hello
+    selfLink: /api/v1/namespaces/ricardoalonsos-demo/services/hello
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: hello
+      deploymentconfig: hello
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: hello
+    name: hello
+    selfLink: /apis/build.openshift.io/v1/namespaces/ricardoalonsos-demo/buildconfigs/hello
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: hello:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      contextDir: html-helloworld
+      git:
+        uri: https://github.com/ricardoalonso/DO288-apps
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: apache:latest
+      type: Source
+    successfulBuildsHistoryLimit: 5
+    triggers:
+    - github:
+        secret: aPo9StI2KbRoLkqT-rs6
+      type: GitHub
+    - generic:
+        secret: 0EReWhq76w57ikZ0YtZw
+      type: Generic
+    - type: ConfigChange
+    - imageChange:
+        lastTriggeredImageID: quay.io/ricardoalonsos/apache@sha256:822ba648825c6e5c5d25b0c4eb9fb47a7cd50aef6be68c3c2dc9c0d0e0295d80
+      type: ImageChange
+  status:
+    lastVersion: 2
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/image.dockerRepositoryCheck: "2020-04-30T10:45:51Z"
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: hello
+    name: apache
+    selfLink: /apis/image.openshift.io/v1/namespaces/ricardoalonsos-demo/imagestreams/apache
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: quay.io/ricardoalonsos/apache
+      from:
+        kind: DockerImage
+        name: quay.io/ricardoalonsos/apache
+      generation: 1
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/apache
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: hello
+    name: hello
+    selfLink: /apis/image.openshift.io/v1/namespaces/ricardoalonsos-demo/imagestreams/hello
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/hello
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: null
+    labels:
+      app: hello
+    name: hello
+    selfLink: /apis/route.openshift.io/v1/namespaces/ricardoalonsos-demo/routes/hello
+  spec:
+    host: hello-ricardoalonsos-demo.apps.ocp-na2.prod.nextcle.com
+    port:
+      targetPort: 8080-tcp
+    subdomain: ""
+    to:
+      kind: Service
+      name: hello
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress: null
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
