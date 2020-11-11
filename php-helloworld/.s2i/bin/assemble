@@ -1,9 +1,10 @@
 #!/bin/bash
 
-echo "Calling father script..."
+# call the original assemble
+echo "Calling original assemble..."
 /usr/libexec/s2i/assemble
 
-DATE=$(date)
-echo "Application built on $DATE" > info.html 
-echo "Modified by Ricardo Alonso" >> info.html
-
+echo "Running custom content"
+# Create an info page
+echo "This page was create for the DO288 Class for IBM" > ibm.html 
+echo "Generated on $(date)" >> ibm.html
