@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# call the original assemble
-echo "Calling original assemble..."
+# Call original assemble script
 /usr/libexec/s2i/assemble
 
-echo "Running custom content"
-# Create an info page
-echo "This page was create for the DO288 Class for IBM" > ibm.html 
-echo "Generated on $(date)" >> ibm.html
+# New info.html page 
+echo "The app was built on $(date)" > info.html
